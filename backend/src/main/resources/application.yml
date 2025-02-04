@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: digital-detox-app
+  profiles:
+    active: dev

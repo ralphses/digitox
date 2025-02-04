@@ -1,0 +1,19 @@
+{
+    "stats": {
+        "screenTime": "0s",
+        "sleepDuration": "0s",
+        "sleepQuality": "0%"
+    },
+    "token": "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJkaWdpdG94Iiwic3ViIjoiZXplLnJhcGhAZ21haWwuY29tIiwiZXhwIjoxNzM2NDM3MzM5LCJpYXQiOjE3MzYzNTA5MzksInNjb3BlIjoiUk9MRV9VU0VSIn0.L8MnqD4gqErCvN1tIvWOb5eJd1ab23Z3ayOAo2Ym4C2_XBcg98q1it68x4OP8hsKgVbDVRWZerJlt6d7vLuXKw",
+    "user": {
+        "active": true,
+        "bannerImage": "https://via.placeholder.com/400x200",
+        "email": "eze.raph@gmail.com",
+        "level": null,
+        "name": "Ralphsess",
+        "points": null,
+        "profileImage": "https://via.placeholder.com/150",
+        "role": "USER",
+        "totalScreenTime": null
+    }
+}

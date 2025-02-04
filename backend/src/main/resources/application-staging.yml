@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    url: jdbc:${STAGING_DB}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      timeout: ${REDIS_CONNECTION_TIMEOUT}
+  cache:
+    redis:
+      time-to-live:
+  flyway:
+    baseline-on-migrate: true
+    enabled: true
+    password: ${MYSQL_ROOT_PASSWORD}
+    user: ${MYSQL_USER}
+    baseline-description: "init"
+    baseline-version: 0
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    show-sql: true
+  config:
+    import: classpath:credentials/secretes.properties
+
+application:
+  security:
+    jwt:
+      secrete: ${JWT_SECRETE}
+  user:
+    image:
+      default-profile: https://via.placeholder.com/150
+      default-banner : https://via.placeholder.com/400x200
+

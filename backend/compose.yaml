@@ -1,0 +1,22 @@
+services:
+  mysql:
+    image: 'mysql:8.3.0'
+    restart: no
+    environment:
+      - 'MYSQL_DATABASE=digitox'
+      - 'MYSQL_PASSWORD=password'
+      - 'MYSQL_ROOT_PASSWORD=password'
+      - 'MYSQL_USER=digitox'
+    ports:
+      - '33011:3306'
+    volumes:
+      - 'mysql_data:/var/lib/mysql' # Persistent volume for MySQL data
+    depends_on:
+      - redis
+  redis:
+    image: 'redis:7-alpine'
+    ports:
+      - '6379'
+
+volumes:
+  mysql_data:

@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS daily_milestone_entity
 (
-    id            BINARY(16)     NOT NULL, -- Embedded primary key using UUID (stored as CHAR(36))
+    id            VARCHAR(100)     NOT NULL, -- Embedded primary key using UUID (stored as CHAR(36))
     user_email     VARCHAR(255) NOT NULL, -- User email
     label         VARCHAR(255) NOT NULL, -- Label of the milestone
     date          DATE         NOT NULL, -- Date of the milestone

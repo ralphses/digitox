@@ -1,5 +1,7 @@
 package com.clicks.digitox.infrastructure.exception;
 
+import com.clicks.digitox.domain.community_post.exceptions.CommunityPostNotFoundException;
+import com.clicks.digitox.domain.community_post.exceptions.InvalidMilestoneIdException;
 import com.clicks.digitox.domain.sleep_info.exceptions.SleepInfoExceptionNotFound;
 import com.clicks.digitox.domain.user.exceptions.UnauthorizedUserException;
 import com.clicks.digitox.domain.user.exceptions.UserAlreadyExistException;
@@ -26,7 +28,9 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({
             UserNotFoundException.class,
-            SleepInfoExceptionNotFound.class
+            SleepInfoExceptionNotFound.class,
+            CommunityPostNotFoundException.class,
+            InvalidMilestoneIdException.class
     })
     public ApiResponse handleNotFount(RuntimeException exception) {
         return new ApiResponse(false, exception.getMessage());

@@ -77,7 +77,7 @@ public class DailyMilestoneController implements MilestoneApi {
     @Override
     @DeleteMapping("{milestoneId}")
     public ApiResponse deleteMilestone(@PathVariable String milestoneId) {
-        var dailyMilestoneId = new DailyMilestoneId(UUID.fromString(milestoneId));
+        var dailyMilestoneId = new DailyMilestoneId(milestoneId);
         deleteMileStone.execute(dailyMilestoneId);
         return new ApiResponse(true, Collections.emptyList());
     }

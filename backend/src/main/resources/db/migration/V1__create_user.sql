@@ -2,7 +2,7 @@
 -- Create the main UserEntity table
 CREATE TABLE user_entity
 (
-    id                BINARY(16) PRIMARY KEY,
+    id                VARCHAR(100) PRIMARY KEY,
     name              VARCHAR(255)        NOT NULL,
     email             VARCHAR(255) UNIQUE NOT NULL,
     password          VARCHAR(255)        NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE user_entity
 -- Create a separate table for the milestones element collection
 CREATE TABLE user_entity_milestones
 (
-    user_entity_id   BINARY(16),
+    user_entity_id   VARCHAR(100),
     milestones VARCHAR(255) NOT NULL,
     FOREIGN KEY (user_entity_id) REFERENCES user_entity (id)
 );

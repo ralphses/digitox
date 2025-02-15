@@ -43,7 +43,8 @@ public class ApplicationSecurity {
             "/api/v1/auth/register",
             "/api/v1/auth/update-password",
             "/api/v1/auth/profile/**",
-            "/api/v1/milestone/**"
+            "/api/v1/milestone/**",
+            "/api/v1/milestone/post/**"
     };
 
     private static final String[] SWAGGER_WHITELIST_URL = {

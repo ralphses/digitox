@@ -4,10 +4,10 @@ import org.springframework.util.Assert;
 
 import java.util.UUID;
 
-public record DailyMilestoneId(UUID id) {
+public record DailyMilestoneId(String id) {
 
     public DailyMilestoneId() {
-        this(UUID.randomUUID());
+        this(UUID.randomUUID().toString());
     }
 
     public DailyMilestoneId {

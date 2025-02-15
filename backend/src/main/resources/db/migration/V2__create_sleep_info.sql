@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS sleep_info_entity (
-    Id BINARY(16) PRIMARY KEY,
+    Id VARCHAR(100) PRIMARY KEY,
     user_email VARCHAR(150) NOT NULL,
     screen_time BIGINT DEFAULT 0,
     sleep_duration BIGINT DEFAULT 0,

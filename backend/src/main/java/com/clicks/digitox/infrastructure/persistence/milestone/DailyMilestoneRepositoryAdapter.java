@@ -77,7 +77,7 @@ public class DailyMilestoneRepositoryAdapter implements DailyMilestoneRepository
     }
 
     private DailyMilestoneId getDailyMilestoneId(String milestoneId) {
-        return new DailyMilestoneId(UUID.fromString(milestoneId));
+        return new DailyMilestoneId(milestoneId);
     }
 
     private List<DailyMilestone> getDailyMilestones(MilestoneType type) {

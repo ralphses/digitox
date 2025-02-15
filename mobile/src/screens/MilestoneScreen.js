@@ -35,7 +35,7 @@ export default function MilestoneScreen() {
     
         const fetchUserMilestones = async (email) => {
             try {
-                const response = await fetch(`https://9e19-102-89-33-27.ngrok-free.app/api/v1/milestone/user/${email}`, {
+                const response = await fetch(`https://digitox-app.up.railway.app/api/v1/milestone/user/${email}`, {
                     method: "GET",
                 });
     
@@ -65,7 +65,7 @@ export default function MilestoneScreen() {
     
         const fetchCommunitySuggestions = async (email) => {
             try {
-                const response = await fetch(`https://9e19-102-89-33-27.ngrok-free.app/api/v1/milestone/community/${email}`, {
+                const response = await fetch(`https://digitox-app.up.railway.app/api/v1/milestone/community/${email}`, {
                     method: "GET",
                 });
     

@@ -26,7 +26,7 @@ export default function CreateAccount() {
 
     try {
       const response = await fetch(
-        'https://9c36-102-89-33-27.ngrok-free.app/api/v1/auth/register',
+        'https://digitox-app.up.railway.app/api/v1/auth/register',
         {
           method: 'POST',
           headers: {
@@ -44,8 +44,8 @@ export default function CreateAccount() {
 
       if (result.success) {
         const payload = result.data;
-        await AsyncStorage.setItem('user', JSON.stringify(payload)); // Save user payload to AsyncStorage
-        navigation.navigate('Home'); // Navigate to the home screen
+        await AsyncStorage.setItem('user', JSON.stringify(payload));
+        navigation.navigate('Home');
       } else {
         Alert.alert('Registration Failed', 'Please try again.');
       }
@@ -57,36 +57,43 @@ export default function CreateAccount() {
 
   return (
     <View style={styles.container}>
-      {/* Logo Section */}
       <Image
-        source={require('./assets/digitox-logo.png')} // Replace with your logo file path
+        source={require('./assets/digitox-logo.png')}
         style={styles.logo}
         resizeMode="contain"
       />
 
       <Text style={styles.title}>Create Account</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Name"
-        value={name}
-        onChangeText={setName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Name</Text>
+        <TextInput
+          style={styles.input}
+          value={name}
+          onChangeText={setName}
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Password</Text>
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+      </View>
 
       <TouchableOpacity
         style={styles.createAccountButton}
@@ -110,13 +117,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     justifyContent: 'center',
-    backgroundColor: '#ffff', // Light teal background
+    backgroundColor: '#ffff',
   },
   logo: {
     width: 120,
     height: 120,
     alignSelf: 'center',
-    marginBottom: 20, // Adds spacing below the logo
+    marginBottom: 20,
   },
   title: {
     fontSize: 34,
@@ -124,6 +131,15 @@ const styles = StyleSheet.create({
     color: '#00796B',
     textAlign: 'center',
     marginBottom: 40,
+  },
+  inputContainer: {
+    width: '100%',
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    color: '#00796B',
+    marginBottom: 5,
   },
   input: {
     width: '100%',
@@ -133,7 +149,6 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: 10,
     paddingHorizontal: 15,
-    marginBottom: 20,
     fontSize: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },

@@ -33,7 +33,7 @@ export default function CreateMilestoneScreen() {
                 type: milestoneType.toLowerCase(),
             };
 
-            const response = await fetch("https://2c40-102-89-33-27.ngrok-free.app/api/v1/milestone", {
+            const response = await fetch("https://digitox-app.up.railway.app/api/v1/milestone", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

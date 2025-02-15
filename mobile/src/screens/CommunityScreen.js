@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable'; // For animations
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker'; // Import Picker from @react-native-picker/picker
+import axios from 'axios';
 
 // Function to format the date and time
 const formatDate = (date) => {
@@ -16,15 +17,47 @@ export default function CommunityScreen() {
     const [loading, setLoading] = useState(true);
     const [userData, setUserData] = useState(null);
     const [posts, setPosts] = useState([]); // Array to store milestone posts
+    const [milestones, setMilestones] = useState([]);
     const [newPostText, setNewPostText] = useState('');
     const [selectedMilestone, setSelectedMilestone] = useState(''); // State for milestone selection
 
-    // Sample posts data
-    const samplePosts = [
-        { id: 1, user: 'John Doe', milestone: 'Completed my first 100 points!', likes: 15, comments: 5, date: new Date() },
-        { id: 2, user: 'Jane Smith', milestone: 'Reached level 2 in the challenge!', likes: 10, comments: 3, date: new Date() },
-        { id: 3, user: 'Alice Brown', milestone: 'Earned my first reward: Free Ebook!', likes: 20, comments: 8, date: new Date() },
-    ];
+
+    useEffect(() => {
+        const fetchMilestoneData = async () => {
+            try {
+                const milestoneResponse = await axios.get("https://digitox-app.up.railway.app/api/v1/milestone");
+                if (milestoneResponse.data.success) {
+                    console.log(milestoneResponse.data.data);
+                    setMilestones(milestoneResponse.data.data)
+                } else {
+                    Alert.alert('Error', 'Error fetching milestones');
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setLoading(false); // Stop loading even in case of error
+            }
+        };
+
+        const fetchPostData = async () => {
+            try {
+                const postResponse = await axios.get("https://digitox-app.up.railway.app/api/v1/milestone/post");
+                if (postResponse.data.success) {
+                    console.log(postResponse.data.data);
+                    setPosts(postResponse.data.data)
+                } else {
+                    Alert.alert('Error', 'Error fetching posts');
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setLoading(false); // Stop loading even in case of error
+            }
+        };
+
+
+        fetchPostData();
+        fetchMilestoneData();
+
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,46 +78,73 @@ export default function CommunityScreen() {
         fetchData();
     }, []);  // Empty array ensures this runs once when the component mounts
 
-    const createPost = () => {
+    const createPost = async () => {
         if (newPostText.trim() && selectedMilestone) {
-            const newPost = {
-                id: posts.length + 1,
-                user: userData?.name || 'Anonymous',
-                milestone: `${selectedMilestone}: ${newPostText}`,
-                likes: 0,
-                comments: 0,
-                date: new Date(), // Add current date and time
-            };
-            setPosts([newPost, ...posts]);
-            setNewPostText(''); // Clear input after posting
-            setSelectedMilestone(''); // Clear the selected milestone
+            try {
+                const newPost = {
+                    milestoneId: selectedMilestone,
+                    userEmail: userData.user.email,
+                    content: newPostText
+                };
+    
+                const createPostResponse = await axios.post(
+                    "https://digitox-app.up.railway.app/api/v1/milestone/post",
+                    newPost
+                );
+    
+                if (createPostResponse.data.success) {
+                    const createdPost = createPostResponse.data.data; // Assuming the API returns the created post
+    
+                    // Update state with the new post
+                    setPosts((prevPosts) => [createdPost, ...prevPosts]);
+    
+                    Alert.alert("Success", "Post created successfully!");
+                    setNewPostText(""); // Clear input after posting
+                    setSelectedMilestone(""); // Clear the selected milestone
+                } else {
+                    Alert.alert("Error", "Error creating a new post.");
+                }
+            } catch (error) {
+                console.error("Error creating post:", error);
+                Alert.alert("Error", "Something went wrong. Please try again.");
+            }
         } else {
-            Alert.alert('Error', 'Please select a milestone and enter text before posting.');
+            Alert.alert("Error", "Please select a milestone and enter text before posting.");
         }
     };
+    
 
-    const likePost = (postId) => {
-        const updatedPosts = posts.map((post) => {
-            if (post.id === postId) {
-                post.likes += 1;
-            }
-            return post;
-        });
-        setPosts(updatedPosts);
+    const likePost = async (postId) => {
+        try {
+            // Optimistically update the UI
+            const updatedPosts = posts.map((post) => {
+                if (post.id === postId) {
+                    return { ...post, noOfLikes: post.noOfLikes + 1 };
+                }
+                return post;
+            });
+    
+            setPosts(updatedPosts);
+    
+            // Send request to backend
+            await axios.post(`https://digitox-app.up.railway.app/api/v1/milestone/post/${postId}/like`);
+        } catch (error) {
+            console.error("Error liking post:", error);
+        }
     };
-
+    
     const commentOnPost = (postId) => {
         Alert.alert('Comment', `Post ID: ${postId} - Add your comment!`);
     };
 
- if (loading) {
-     return (
-       <View style={styles.loadingContainer}>
-         <ActivityIndicator size="large" color="#00796B" />
-         <Text style={styles.loadingText}>Loading...</Text>
-       </View>
-     );
-   }
+    if (loading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#00796B" />
+                <Text style={styles.loadingText}>Loading...</Text>
+            </View>
+        );
+    }
 
     return (
         <ScrollView style={styles.container}>
@@ -92,7 +152,7 @@ export default function CommunityScreen() {
             <Animatable.View animation="fadeIn" duration={100} style={styles.header}>
                 <Text style={styles.title}>Community Milestones</Text>
                 <TouchableOpacity style={styles.createPostButton} onPress={createPost}>
-                    <Text style={styles.createPostText}>Create Milestone</Text>
+                    <Text style={styles.createPostText}>Say Something!</Text>
                 </TouchableOpacity>
             </Animatable.View>
 
@@ -104,11 +164,16 @@ export default function CommunityScreen() {
                     onValueChange={(itemValue) => setSelectedMilestone(itemValue)}
                     style={styles.milestonePicker}>
                     <Picker.Item label="Select Milestone" value="" />
-                    <Picker.Item label="First 100 points" value="First 100 points" />
-                    <Picker.Item label="Reached level 2" value="Reached level 2" />
-                    <Picker.Item label="Earned a reward" value="Earned a reward" />
-                    <Picker.Item label="Completed challenge" value="Completed challenge" />
-                    {/* Add more options here */}
+
+                    {milestones.length > 0 ? (
+                        milestones.map((mile) => (
+                            <Picker.Item label={mile.label} value={mile.id} />
+
+                        ))
+                    ) : (
+                        <Picker.Item label="No Available milestone" value="" />
+                    )}
+
                 </Picker>
 
                 {/* Text Input for entering the milestone details */}
@@ -123,19 +188,19 @@ export default function CommunityScreen() {
 
             {/* Posts Section */}
             <View style={styles.postsSection}>
-                {samplePosts.length > 0 ? (
-                    samplePosts.map((post) => (
+                {posts.length > 0 ? (
+                    posts.map((post) => (
                         <Animatable.View key={post.id} animation="zoomIn" delay={500} style={styles.postCard}>
-                            <Text style={styles.postUser}>{post.user}</Text>
-                            <Text style={styles.postDate}>{formatDate(post.date)}</Text> {/* Date formatted here */}
-                            <Text style={styles.postText}>{post.milestone}</Text>
+                            <Text style={styles.postUser}>{post.createdBy}</Text>
+                            <Text style={styles.postDate}>{post.createdAt}</Text> {/* Date formatted here */}
+                            <Text style={styles.postText}>{post.content}</Text>
 
                             <View style={styles.postActions}>
                                 <TouchableOpacity onPress={() => likePost(post.id)} style={styles.likeButton}>
-                                    <Text style={styles.likeButtonText}>Like ({post.likes})</Text>
+                                    <Text style={styles.likeButtonText}>Like ({post.noOfLikes})</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={() => commentOnPost(post.id)} style={styles.commentButton}>
-                                    <Text style={styles.commentButtonText}>Comment ({post.comments})</Text>
+                                    <Text style={styles.commentButtonText}>Comment ({post.comments.length})</Text>
                                 </TouchableOpacity>
                             </View>
                         </Animatable.View>

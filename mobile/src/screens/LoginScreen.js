@@ -35,18 +35,16 @@ export default function Login() {
   }, []);
 
   const handleLogin = async () => {
-    console.log(`https://digitox-app.up.railway.app/api/v1/auth/login`);
-    
     if (!email || !password) {
       Alert.alert('Error', 'Please enter both email and password.');
       return;
     }
 
     try {
-      const response = await axios.post(`https://digitox-app.up.railway.app/api/v1/auth/login`, {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        `https://digitox-app.up.railway.app/api/v1/auth/login`,
+        { email, password }
+      );
 
       if (response.data.success) {
         const { data } = response.data;
@@ -70,24 +68,32 @@ export default function Login() {
     <View style={styles.container}>
       <Image source={require('./assets/digitox-logo.png')} style={styles.logo} />
       <Text style={styles.title}>Welcome Back</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Password</Text>
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+      </View>
+
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
+      
       <TouchableOpacity
         style={styles.registerLink}
         onPress={() => navigation.navigate('CreateAccount')}
@@ -103,7 +109,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ffff', // Subtle modern background
+    backgroundColor: '#ffff',
     padding: 20,
   },
   logo: {
@@ -117,16 +123,23 @@ const styles = StyleSheet.create({
     color: '#00796B',
     marginBottom: 20,
   },
-  input: {
+  inputContainer: {
     width: '100%',
+    marginBottom: 15,
+  },
+  label: {
+    fontSize: 16,
+    color: '#00796B',
+    marginBottom: 5,
+  },
+  input: {
     height: 50,
     borderColor: '#00796B',
     borderWidth: 1.5,
     borderRadius: 10,
     paddingHorizontal: 15,
-    marginBottom: 15,
     fontSize: 16,
-    backgroundColor: '#fff', // White background for inputs
+    backgroundColor: '#fff',
   },
   loginButton: {
     backgroundColor: '#00796B',

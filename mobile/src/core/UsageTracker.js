@@ -89,7 +89,7 @@ class UsageTrackerService {
   // Send the stored duration to the backend
   static async sendDurationToBackend(duration) {
     try {
-      const response = await fetch('https://your-backend-server.com/submit-duration', {
+      const response = await fetch('https://digitox-app.up.railway.app/submit-duration', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

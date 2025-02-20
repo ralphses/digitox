@@ -8,8 +8,7 @@ class UsageTrackerService {
   static async getSessions() {
     try {
       const result = await UsageTracker.getSessions();
-      console.log("Fetched sessions");
-      console.log(result);
+
       return result.map((session) => ({
         startTime: new Date(session.startTime).toLocaleString(),
         endTime: new Date(session.endTime).toLocaleString(),
@@ -71,6 +70,7 @@ class UsageTrackerService {
 
   // Send duration to the backend when a new day starts
   static async checkNewDayAndSendDuration() {
+
     const storedDuration = await AsyncStorage.getItem('totalDuration');
     const lastStoredDate = await AsyncStorage.getItem('lastStoredDate');
     const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format

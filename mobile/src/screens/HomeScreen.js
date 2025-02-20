@@ -33,7 +33,9 @@ export default function HomeScreen() {
       .then((result) => {
         if (result) {
           setTimeCountForDate(result.duration);
-          console.log("result");
+          console.log(result.duration);
+          console.log(date);
+          
 
         } else {
           setTimeCountForDate(10);
@@ -83,7 +85,6 @@ export default function HomeScreen() {
     setDate(today);
     if (appState === 'active') {
       console.log(today);
-      
       fetchTimeCountForDate(today);
     }
 

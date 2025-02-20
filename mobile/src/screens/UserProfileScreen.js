@@ -13,36 +13,44 @@ const UserProfileScreen = ({ navigation }) => {
     const fetchData = async () => {
       try {
         const storedUser = await AsyncStorage.getItem('user');
-        if (storedUser) {
-
-          setUserData(JSON.parse(storedUser));
-        
-          const response = await axios.get(`https://digitox-app.up.railway.app/api/v1/auth/profile/${userData['user']['email']}`);
-          if (response.data.success) {
-            const userData = response.data.data.user;
-            const userStats = response.data.data.stats;
-            const userMilestones = response.data.data.milestones;
-
-            setUser(userData);
-            setStats(userStats);
-            setMilestones(userMilestones);
-          } else {
-            Alert.alert("Error", "Failed to fetch user data.");
-          }
-
-        } else {
+        if (!storedUser) {
           navigation.navigate("Login");
+          return;
+        }
+  
+        const parsedUser = JSON.parse(storedUser);
+        setUserData(parsedUser);
+  
+        // Ensure that parsedUser contains user data before proceeding
+        if (!parsedUser?.user?.email) {
+          throw new Error("User data is incomplete.");
+        }
+  
+        const url = `https://digitox-app.up.railway.app/api/v1/auth/profile/${parsedUser.user.email}`;
+        console.log(url);
+        
+        const response = await axios.get(url);
+        console.log(response.status);
+        
+        if (response.data.success) {
+          const { user, stats, milestones } = response.data.data;
+  
+          setUser(user);
+          setStats(stats);
+          setMilestones(milestones);
+        } else {
+          Alert.alert("Error", "Failed to fetch user data.");
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-        setLoading(false); // Stop loading even in case of error
+      } finally {
+        setLoading(false); // Ensure loading is stopped in all cases
       }
     };
   
-
     fetchData();
-    // fetchUserData();
   }, []);
+  
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem("user");

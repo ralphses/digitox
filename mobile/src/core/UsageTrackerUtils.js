@@ -44,11 +44,14 @@ class UsageTrackerUtils {
     this.appStateSubscription = AppState.addEventListener('change', (nextAppState) => {
       this.state.appState = nextAppState;
       if (nextAppState === 'active') {
-        // Fetch time count when app is active
-        this.fetchTimeCountForDate('2025-01-04', updateStateCallback); // Replace with dynamic date if needed
+        // Get today's date in YYYY-MM-DD format
+        const today = new Date().toISOString().split('T')[0];
+        // Fetch time count for today's date
+        this.fetchTimeCountForDate(today, updateStateCallback);
       }
     });
   }
+  
 
   // Cleanup method to remove listeners
   cleanup() {
